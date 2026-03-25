@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+fetch("/api/contact")
 
 export default function Contact() {
   const [formData, setFormData] = useState({

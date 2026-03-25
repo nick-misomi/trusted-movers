@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+fetch("/api/quotes")
 
 export default function Quote() {
   const [formData, setFormData] = useState({
