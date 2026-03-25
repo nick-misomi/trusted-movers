@@ -1,34 +1,27 @@
-import express from 'express'
-import dotenv from 'dotenv'
-import cors from 'cors'
-import morgan from 'morgan'
-import connectDB from './config/db.js'
-import contactRoutes from './routes/contactRoutes.js'
-import quoteRoutes from './routes/quoteRoutes.js'
+import express from "express";
+import mongoose from "mongoose";
+import cors from "cors";
+import serverless from "serverless-http";
+import dotenv from "dotenv";
 
-dotenv.config()
-connectDB()
+import quoteRoutes from "./routes/quoteRoutes.js";
+import contactRoutes from "./routes/contactRoutes.js";
 
-const app = express()
+dotenv.config();
 
-app.use(cors({ origin: process.env.CLIENT_URL }))
-app.use(express.json())
-app.use(morgan('dev'))
+const app = express();
 
-app.get('/', (req, res) => {
-  res.send('Trusted Movers API is running...')
-})
+app.use(cors());
+app.use(express.json());
 
-app.use('/api/contact', contactRoutes)
-app.use('/api/quotes', quoteRoutes)
+// Routes
+app.use("/api/quotes", quoteRoutes);
+app.use("/api/contact", contactRoutes);
 
-const mongoose = require("mongoose");
+// MongoDB connection
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => console.log("MongoDB Connected"))
+  .catch(err => console.log(err));
 
-mongoose.connect(process.env.MONGO_URI)
-.then(() => console.log("MongoDB Connected"))
-.catch(err => console.log(err));
-
-/*const PORT = process.env.PORT || 5000
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
-})*/
+// Export serverless function
+export default serverless(app);
