@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-fetch("/api/quotes")
 
 export default function Quote() {
   const [formData, setFormData] = useState({
@@ -23,42 +22,41 @@ export default function Quote() {
     })
   }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setLoading(true)
+const handleSubmit = async (e) => {
+  e.preventDefault()
+  setLoading(true)
+  setResponseMessage('')
 
-    try {
-      const res = await fetch('http://localhost:5000/api/quotes', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
+  try {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/quotes`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData)
+    })
+
+    const data = await res.json()
+
+    if (res.ok) {
+      setResponseMessage('Quote request submitted successfully!')
+      setFormData({
+        name: '',
+        phone: '',
+        email: '',
+        moveType: '',
+        fromLocation: '',
+        toLocation: '',
+        moveDate: '',
+        details: ''
       })
-
-      const data = await res.json()
-
-      if (res.ok) {
-        setResponseMessage('Quote request submitted successfully!')
-        setFormData({
-          name: '',
-          phone: '',
-          email: '',
-          moveType: '',
-          fromLocation: '',
-          toLocation: '',
-          moveDate: '',
-          details: ''
-        })
-      } else {
-        setResponseMessage('Something went wrong.')
-      }
-    } catch (error) {
-      setResponseMessage('Server error.')
+    } else {
+      setResponseMessage(data.message || 'Something went wrong.')
     }
-
-    setLoading(false)
+  } catch (error) {
+    setResponseMessage('Server error. Please try again.')
   }
+
+  setLoading(false)
+}
 
   return (
     <>

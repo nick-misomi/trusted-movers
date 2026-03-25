@@ -1,11 +1,10 @@
-import React, { useState } from 'react'
-fetch("/api/contact")
+import { useState } from 'react'
 
 export default function Contact() {
   const [formData, setFormData] = useState({
     name: '',
-    phone: '',
     email: '',
+    phone: '',
     message: ''
   })
 
@@ -16,24 +15,37 @@ export default function Contact() {
     })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
-    const phoneNumber = '254728725422'
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/contact`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        }
+      )
 
-    const text = `
-New Contact Message
-Name: ${formData.name}
-Phone: ${formData.phone}
-Email: ${formData.email}
-Message: ${formData.message}
-    `
+      const data = await response.json()
 
-    const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
-      text
-    )}`
+      if (response.ok) {
+        alert('Message sent successfully!')
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          message: ''
+        })
+      } else {
+        alert(data.message || 'Failed to send message')
+      }
 
-    window.open(whatsappURL, '_blank')
+    } catch (error) {
+      console.error(error)
+      alert('Server error. Please try again later.')
+    }
   }
 
   return (
@@ -41,7 +53,7 @@ Message: ${formData.message}
       <section className="page-banner">
         <div className="container">
           <h1>Contact Us</h1>
-          <p>Send us a message directly on WhatsApp.</p>
+          <p>Send us a message directly.</p>
         </div>
       </section>
 
@@ -72,6 +84,7 @@ Message: ${formData.message}
                 type="text"
                 name="name"
                 placeholder="Your Name"
+                value={formData.name}
                 onChange={handleChange}
                 required
               />
@@ -80,6 +93,7 @@ Message: ${formData.message}
                 type="text"
                 name="phone"
                 placeholder="Phone Number"
+                value={formData.phone}
                 onChange={handleChange}
                 required
               />
@@ -88,6 +102,7 @@ Message: ${formData.message}
                 type="email"
                 name="email"
                 placeholder="Email Address"
+                value={formData.email}
                 onChange={handleChange}
                 required
               />
@@ -95,12 +110,13 @@ Message: ${formData.message}
               <textarea
                 name="message"
                 placeholder="Your Message"
+                value={formData.message}
                 onChange={handleChange}
                 required
               ></textarea>
 
               <button type="submit" className="primary-btn">
-                Send via WhatsApp
+                Send Message
               </button>
             </form>
           </div>
