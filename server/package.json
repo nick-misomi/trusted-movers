@@ -14,4 +14,12 @@
     "morgan": "^1.10.0",
     "nodemailer": "^8.0.4"
   }
+  {
+  "name": "transport-app",
+  "version": "1.0.0",
+  "description": "Transport Services Website",
+  "scripts": {
+    "build": "cd client && npm install && npm run build"
+  }
+
 }
