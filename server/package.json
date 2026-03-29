@@ -2,9 +2,11 @@
   "name": "trusted-movers-server",
   "version": "1.0.0",
   "type": "module",
-  "main": "api/index.js",
+  "main": "server.js",
   "scripts": {
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "start": "node server.js",
+    "build": "cd client && npm install && npm run build"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -14,12 +16,4 @@
     "morgan": "^1.10.0",
     "nodemailer": "^8.0.4"
   }
-  {
-  "name": "transport-app",
-  "version": "1.0.0",
-  "description": "Transport Services Website",
-  "scripts": {
-    "build": "cd client && npm install && npm run build"
-  }
-
 }
