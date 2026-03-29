@@ -7,6 +7,9 @@
     "dev": "concurrently \"cd server && npm run dev\" \"cd client && npm run dev\"",
     "install:all": "npm install && cd client && npm install && cd ../server && npm install"
   },
+  "engines": {
+  "node": "18.x"
+},
   "devDependencies": {
     "concurrently": "^8.2.0"
   }
