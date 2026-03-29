@@ -1,7 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
-import serverless from "serverless-http";
 import dotenv from "dotenv";
 
 import quoteRoutes from "./routes/quoteRoutes.js";
@@ -23,5 +22,4 @@ mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log("MongoDB Connected"))
   .catch(err => console.log(err));
 
-// Export serverless function
-export default serverless(app);
+export default app;
