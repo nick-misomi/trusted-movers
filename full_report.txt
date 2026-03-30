@@ -1,0 +1,28 @@
+=== FULL DIAGNOSIS REPORT ===
+
+1. server/.env
+   Exists: true
+   MONGODB_URI=<REDACTED>
+   EMAIL_USER=trustedmovers.kenya@gmail.com
+   EMAIL_PASS=your_app_password
+   RECEIVER_EMAIL=trustedmovers.kenya@gmail.com
+   PORT=5000
+
+2. server/api/index.js
+   Exists: true
+   Uses mongoose: true
+   Has connect call: true
+   Has module.exports: true
+
+3. server/config/db.js
+   Exists: true
+   Uses global cache: false
+   Uses mongoose: true
+   First 200 chars: import mongoose from 'mongoose'  const connectDB = async () => {   try {     const options = {       useNewUrlParser: true,       useUnifiedTopology: true,       serverSelectionTimeoutMS: 5000,
+
+4. vercel.json
+   Exists: true
+   Routes: [{"src":"/api/(.*)","dest":"server/api/index.js"},{"src":"/(.*)","dest":"index.html"}]
+   Builds: [{"src":"server/api/index.js","use":"@vercel/node"},{"src":"client/package.json","use":"@vercel/static-build","config":{"distDir":"dist"}}]
+
+=== END REPORT ===

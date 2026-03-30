@@ -1,23 +1,23 @@
-import mongoose from 'mongoose'
+import mongoose from 'mongoose';
 
-const connectDB = async () => {
-  try {
-    const options = {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      serverSelectionTimeoutMS: 5000,
-      socketTimeoutMS: 45000,
-    }
-    
-    const conn = await mongoose.connect(process.env.MONGODB_URI, options)
-    console.log(`MongoDB connected: ${conn.connection.host}`)
-  } catch (error) {
-    console.error(`Database connection error: ${error.message}`)
-    // Don't exit process on Vercel - let it retry
-    if (process.env.VERCEL_ENV !== 'production') {
-      process.exit(1)
-    }
-  }
+let cached = global.mongoose;
+
+if (!cached) {
+  cached = global.mongoose = { conn: null, promise: null };
 }
 
-export default connectDB
+export default async function dbConnect() {
+  if (cached.conn) {
+    return cached.conn;
+  }
+
+  if (!cached.promise) {
+    const opts = {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    };
+    cached.promise = mongoose.connect(process.env.MONGODB_URI, opts).then((mongoose) => mongoose);
+  }
+  cached.conn = await cached.promise;
+  return cached.conn;
+}
