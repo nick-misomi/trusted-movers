@@ -1,25 +1,19 @@
-import dbConnect from '../config/db.js';
-import Quote from '../models/Quote.js';
 import { sendEmail } from '../config/emailService.js';
 
 export const createQuote = async (req, res) => {
   try {
-    // Ensure database connection is established
-    await dbConnect();
-
-    const quote = new Quote(req.body);
-    await quote.save();
+    const { name, email, phone, from, to, date, message } = req.body;
 
     const emailText = `
 New Quote Request
 
-Name: ${req.body.name}
-Email: ${req.body.email}
-Phone: ${req.body.phone}
-Move From: ${req.body.from}
-Move To: ${req.body.to}
-Move Date: ${req.body.date}
-Message: ${req.body.message}
+Name: ${name}
+Email: ${email}
+Phone: ${phone}
+Move From: ${from}
+Move To: ${to}
+Move Date: ${date}
+Message: ${message}
 `;
 
     const emailSent = await sendEmail(
@@ -29,7 +23,7 @@ Message: ${req.body.message}
 
     if (!emailSent) {
       return res.status(500).json({
-        message: 'Quote saved but email failed'
+        message: 'Quote request received but email failed to send'
       });
     }
 

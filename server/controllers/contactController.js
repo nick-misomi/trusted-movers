@@ -1,22 +1,16 @@
-import dbConnect from '../config/db.js';
-import Contact from '../models/Contact.js';
 import { sendEmail } from '../config/emailService.js';
 
 export const createContact = async (req, res) => {
   try {
-    // Ensure database connection is established
-    await dbConnect();
-
-    const contact = new Contact(req.body);
-    await contact.save();
+    const { name, email, phone, message } = req.body;
 
     const emailText = `
 New Contact Message
 
-Name: ${req.body.name}
-Email: ${req.body.email}
-Phone: ${req.body.phone}
-Message: ${req.body.message}
+Name: ${name}
+Email: ${email}
+Phone: ${phone}
+Message: ${message}
 `;
 
     const emailSent = await sendEmail(
